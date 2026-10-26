@@ -1,0 +1,17 @@
+{
+  "_source": "docs.slack.dev/reference/events/app_home_opened (example payload, view trimmed) wrapped as an event_callback",
+  "token": "one-long-verification-token",
+  "team_id": "T123ABC456",
+  "api_app_id": "A123ABC456",
+  "event": {
+    "type": "app_home_opened",
+    "user": "U061F7AUR",
+    "channel": "D0LAN2Q65",
+    "event_ts": "1515449522000016",
+    "tab": "messages"
+  },
+  "type": "event_callback",
+  "event_id": "Ev0PV52K26",
+  "event_time": 1515449522,
+  "authorizations": [{"enterprise_id": null, "team_id": "T123ABC456", "user_id": "U0LAN0Z89", "is_bot": true, "is_enterprise_install": false}]
+}

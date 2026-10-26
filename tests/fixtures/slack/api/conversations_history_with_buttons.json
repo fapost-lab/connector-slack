@@ -1,0 +1,24 @@
+{
+  "_source": "docs.slack.dev/reference/methods/conversations.history (example response shape) with the blocks a message of this connector has: a section and an actions block",
+  "ok": true,
+  "messages": [
+    {
+      "type": "message",
+      "user": "U0LAN0Z89",
+      "bot_id": "B12345678",
+      "text": "Pick one",
+      "ts": "1721232000.123456",
+      "blocks": [
+        {"type": "section", "block_id": "s1x", "text": {"type": "mrkdwn", "text": "Pick one"}},
+        {
+          "type": "actions",
+          "block_id": "a1x",
+          "elements": [
+            {"type": "button", "action_id": "fp:0:0", "text": {"type": "plain_text", "text": "Yes"}, "value": "s1:b1"}
+          ]
+        }
+      ]
+    }
+  ],
+  "has_more": false
+}

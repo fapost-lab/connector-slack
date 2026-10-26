@@ -1,0 +1,5 @@
+{
+  "_source": "docs.slack.dev/apis/web-api/rate-limits (HTTP 429, the Retry-After header carries the seconds)",
+  "ok": false,
+  "error": "ratelimited"
+}

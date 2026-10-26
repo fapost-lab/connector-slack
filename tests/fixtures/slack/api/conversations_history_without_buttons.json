@@ -1,0 +1,15 @@
+{
+  "_source": "docs.slack.dev/reference/methods/conversations.history (example response shape), a message that has no actions block",
+  "ok": true,
+  "messages": [
+    {
+      "type": "message",
+      "user": "U0LAN0Z89",
+      "bot_id": "B12345678",
+      "text": "Pick one",
+      "ts": "1721232000.123456",
+      "blocks": [{"type": "section", "block_id": "s1x", "text": {"type": "mrkdwn", "text": "Pick one"}}]
+    }
+  ],
+  "has_more": false
+}

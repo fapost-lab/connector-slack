@@ -1,0 +1,7 @@
+{
+  "_source": "docs.slack.dev/reference/methods/chat.update (example response)",
+  "ok": true,
+  "channel": "D024BE91L",
+  "ts": "1721232000.123456",
+  "text": "Pick one"
+}

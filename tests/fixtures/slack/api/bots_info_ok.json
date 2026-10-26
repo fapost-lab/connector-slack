@@ -1,0 +1,12 @@
+{
+  "_source": "docs.slack.dev/reference/methods/bots.info (example response)",
+  "ok": true,
+  "bot": {
+    "id": "B12345678",
+    "deleted": false,
+    "name": "FaPost Assistant",
+    "updated": 1449272004,
+    "app_id": "A123ABC456",
+    "user_id": "U0LAN0Z89"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "_source": "built from docs.slack.dev/reference/block-kit/blocks/section-block and the mrkdwn link syntax <url|text> of docs.slack.dev/messaging/formatting-message-text",
+  "channel": "U2147483697",
+  "blocks": [
+    {"type": "section", "text": {"type": "mrkdwn", "text": "<https://example.test/m/abc?sig=1&amp;x=2|price list.pdf>"}}
+  ],
+  "text": "price list.pdf"
+}

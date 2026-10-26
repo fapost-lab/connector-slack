@@ -1,0 +1,7 @@
+{
+  "_source": "docs.slack.dev/reference/methods/chat.postMessage (example response; channel is the D... channel of the direct message when the request named a user id)",
+  "ok": true,
+  "channel": "D024BE91L",
+  "ts": "1721232000.123456",
+  "message": {"type": "message", "user": "U0LAN0Z89", "text": "Pick one", "ts": "1721232000.123456"}
+}

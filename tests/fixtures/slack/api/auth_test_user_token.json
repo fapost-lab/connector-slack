@@ -1,0 +1,10 @@
+{
+  "_source": "docs.slack.dev/reference/methods/auth.test (a user token: the answer has no bot_id)",
+  "ok": true,
+  "url": "https://acme.slack.com/",
+  "team": "Acme Workspace",
+  "user": "grace",
+  "team_id": "T123ABC456",
+  "user_id": "W12345678",
+  "is_enterprise_install": false
+}

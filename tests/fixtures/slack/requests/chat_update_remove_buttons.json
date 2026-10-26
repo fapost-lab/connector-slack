@@ -1,0 +1,9 @@
+{
+  "_source": "built from the argument list of docs.slack.dev/reference/methods/chat.update: the message of api/conversations_history_with_buttons.json without its actions block",
+  "channel": "D024BE91L",
+  "ts": "1721232000.123456",
+  "blocks": [
+    {"type": "section", "block_id": "s1x", "text": {"type": "mrkdwn", "text": "Pick one"}}
+  ],
+  "text": "Pick one"
+}

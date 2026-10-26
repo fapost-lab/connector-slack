@@ -1,0 +1,21 @@
+{
+  "_source": "built from the argument list of docs.slack.dev/reference/methods/chat.postMessage and docs.slack.dev/reference/block-kit (section, actions, button); two rows, action ids fp:{row}:{col}",
+  "channel": "U2147483697",
+  "blocks": [
+    {"type": "section", "text": {"type": "mrkdwn", "text": "Pick one &amp; go"}},
+    {
+      "type": "actions",
+      "elements": [
+        {"type": "button", "text": {"type": "plain_text", "text": "Yes"}, "action_id": "fp:0:0", "value": "s1:b1"},
+        {"type": "button", "text": {"type": "plain_text", "text": "No"}, "action_id": "fp:0:1", "value": "s1:b2"}
+      ]
+    },
+    {
+      "type": "actions",
+      "elements": [
+        {"type": "button", "text": {"type": "plain_text", "text": "Maybe later"}, "action_id": "fp:1:0", "value": "s1:b3"}
+      ]
+    }
+  ],
+  "text": "Pick one &amp; go"
+}

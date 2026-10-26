@@ -1,0 +1,9 @@
+{
+  "_source": "built from docs.slack.dev/reference/block-kit/blocks/image-block (image_url, alt_text) and chat.postMessage; caption written in Telegram HTML",
+  "channel": "U2147483697",
+  "blocks": [
+    {"type": "image", "image_url": "https://example.test/m/cat.png?sig=abc", "alt_text": "Our cat"},
+    {"type": "section", "text": {"type": "mrkdwn", "text": "*Our* cat"}}
+  ],
+  "text": "*Our* cat"
+}

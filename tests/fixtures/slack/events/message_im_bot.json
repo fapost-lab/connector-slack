@@ -1,0 +1,20 @@
+{
+  "_source": "docs.slack.dev/reference/events/message.im and docs.slack.dev/reference/events/message/bot_message (bot_id marks a message of a bot or app); event_callback wrapper from docs.slack.dev/apis/events-api",
+  "token": "one-long-verification-token",
+  "team_id": "T123ABC456",
+  "api_app_id": "A123ABC456",
+  "event": {
+    "type": "message",
+    "channel": "D024BE91L",
+    "user": "U0BOT0000",
+    "bot_id": "B07ABC123",
+    "text": "I am another bot",
+    "ts": "1355517524.000006",
+    "event_ts": "1355517524.000006",
+    "channel_type": "im"
+  },
+  "type": "event_callback",
+  "event_id": "Ev0PV52K23",
+  "event_time": 1355517524,
+  "authorizations": [{"enterprise_id": null, "team_id": "T123ABC456", "user_id": "U0LAN0Z89", "is_bot": true, "is_enterprise_install": false}]
+}

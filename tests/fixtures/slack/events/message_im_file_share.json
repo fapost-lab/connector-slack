@@ -1,0 +1,32 @@
+{
+  "_source": "docs.slack.dev/reference/events/message/file_share (subtype file_share, files[] trimmed to the fields the connector reads) wrapped as an event_callback",
+  "token": "one-long-verification-token",
+  "team_id": "T123ABC456",
+  "api_app_id": "A123ABC456",
+  "event": {
+    "type": "message",
+    "subtype": "file_share",
+    "channel": "D024BE91L",
+    "user": "U2147483697",
+    "text": "Look at this &amp; tell me &lt;what&gt; it is",
+    "files": [
+      {
+        "id": "F0S43P1CZ",
+        "name": "tedair.gif",
+        "title": "tedair.gif",
+        "mimetype": "image/gif",
+        "filetype": "gif",
+        "size": 71123,
+        "url_private": "https://files.slack.com/files-pri/T123ABC456-F0S43P1CZ/tedair.gif",
+        "url_private_download": "https://files.slack.com/files-pri/T123ABC456-F0S43P1CZ/download/tedair.gif"
+      }
+    ],
+    "ts": "1355517523.000005",
+    "event_ts": "1355517523.000005",
+    "channel_type": "im"
+  },
+  "type": "event_callback",
+  "event_id": "Ev0PV52K22",
+  "event_time": 1355517523,
+  "authorizations": [{"enterprise_id": null, "team_id": "T123ABC456", "user_id": "U0LAN0Z89", "is_bot": true, "is_enterprise_install": false}]
+}
