@@ -117,9 +117,10 @@ php ../../vendor/bin/phpunit -c phpunit.xml
 
 The feature tests (`tests/Feature`) use Core's connector testing kit, `Fapost\Testing\ConnectorTestCase`: they post
 signed requests to Core's real webhook route, send through Core's message sender and run its webhook registration,
-with Slack faked by `Http::fake()`. A test run does not have the package in Core's `composer.json`, so the test
-registers the channel the provider declares, the way Core's own fixture connector test does, and `phpunit.xml` leaves
-Core's connector registry open (`SOLUTIONS_FREEZE_CONSOLE_REGISTRY=false`) for that.
+with Slack faked by `Http::fake()`. A test run does not have the package in Core's `composer.json`, so the test boots it with the kit's
+`bootConnector(SlackConnectorServiceProvider::class)`, which validates the manifest in this `composer.json` and registers
+the provider's channels through Core's connector registrar. `phpunit.xml` leaves Core's connector registry open
+(`SOLUTIONS_FREEZE_CONSOLE_REGISTRY=false`) for that.
 
 The Slack requests and responses the tests use are in `tests/fixtures/slack/`; each file names the page of
 docs.slack.dev it was derived from in its `_source` key. They hold no real token or identifier.

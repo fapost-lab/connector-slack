@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace Fapost\Connector\Slack\Tests\Feature;
 
-use App\Domains\Channels\ConnectorChannels;
 use Fapost\Connector\Slack\SlackChannelProfile;
 use Fapost\Connector\Slack\SlackConnectorServiceProvider;
 use Fapost\Connector\Slack\Tests\Support\Fixture;
 use Fapost\Foundation\Channel\ChannelInterface;
 use Fapost\Foundation\Channel\InboundEventIgnoredException;
-use Fapost\Foundation\Connector\ConnectorChannel;
 use Fapost\Foundation\DTO\IncomingMessageType;
 use Fapost\Foundation\Messaging\Button;
 use Fapost\Foundation\Messaging\ButtonSet;
@@ -34,11 +32,8 @@ final class SlackChannelTest extends ConnectorTestCase
     {
         parent::setUp();
 
-        // What the provider does at boot: the kit starts from a Core that has the connector installed, but this
-        // package is not in Core's composer when the test runs, so it registers the channel the provider declares.
-        $channels = $this->registeredChannel();
-
-        $this->app->make(ConnectorChannels::class)->add($channels, 'slack', 'Slack');
+        // The package is not in Core's composer when the test runs: the kit boots it from its own manifest.
+        $this->bootConnector(SlackConnectorServiceProvider::class);
 
         Http::preventStrayRequests();
         // Creating a channel runs its webhook registrar, which asks Slack who the token belongs to.
@@ -254,27 +249,6 @@ final class SlackChannelTest extends ConnectorTestCase
         $link = (new SlackChannelProfile())->publicLink($config);
 
         $this->assertSame('https://slack.com/app_redirect?app=A123ABC456&team=T123ABC456', $link?->url);
-    }
-
-    private function registeredChannel(): ConnectorChannel
-    {
-        $registered = [];
-
-        $registrar = new class ($registered) implements \Fapost\Foundation\Connector\ConnectorRegistrarInterface {
-            /** @param  list<ConnectorChannel>  $channels */
-            public function __construct(public array &$channels)
-            {
-            }
-
-            public function registerChannel(ConnectorChannel $channel): void
-            {
-                $this->channels[] = $channel;
-            }
-        };
-
-        (new SlackConnectorServiceProvider($this->app))->registerChannelsWith($registrar);
-
-        return $registered[0];
     }
 
     private function slackRequest(string $method): Request
