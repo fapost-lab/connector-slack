@@ -1,0 +1,12 @@
+{
+  "_source": "docs.slack.dev/reference/methods/files.info (example response, trimmed to the fields the downloader reads)",
+  "ok": true,
+  "file": {
+    "id": "F0S43P1CZ",
+    "name": "tedair.gif",
+    "mimetype": "image/gif",
+    "size": 11,
+    "url_private": "https://files.slack.com/files-pri/T123ABC456-F0S43P1CZ/tedair.gif",
+    "url_private_download": "https://files.slack.com/files-pri/T123ABC456-F0S43P1CZ/download/tedair.gif"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "_source": "docs.slack.dev/reference/interaction-payloads/block_actions-payload (button in a message, trimmed to the fields the connector reads and the neighbours it ignores); action id is this connector's own fp:{row}:{col}",
+  "type": "block_actions",
+  "user": {"id": "U2147483697", "username": "jdoe", "name": "jdoe", "team_id": "T123ABC456"},
+  "api_app_id": "A123ABC456",
+  "token": "one-long-verification-token",
+  "container": {"type": "message", "message_ts": "1721232000.123456", "channel_id": "D024BE91L", "is_ephemeral": false},
+  "trigger_id": "13345224609.738474920.8088930838d88f008e0",
+  "team": {"id": "T123ABC456", "domain": "acme"},
+  "enterprise": null,
+  "is_enterprise_install": false,
+  "channel": {"id": "D024BE91L", "name": "directmessage"},
+  "message": {"type": "message", "user": "U0LAN0Z89", "ts": "1721232000.123456", "text": "Pick one"},
+  "state": {"values": {}},
+  "response_url": "https://hooks.slack.com/actions/T123ABC456/1234567890/abcdefghijklmnop",
+  "actions": [
+    {
+      "action_id": "fp:0:1",
+      "block_id": "Ab1c",
+      "text": {"type": "plain_text", "text": "Yes", "emoji": true},
+      "value": "s1:b2",
+      "type": "button",
+      "action_ts": "1721232015.000200"
+    }
+  ]
+}

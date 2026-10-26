@@ -1,0 +1,5 @@
+{
+  "_source": "docs.slack.dev/reference/methods/chat.postMessage (error table: invalid_auth)",
+  "ok": false,
+  "error": "invalid_auth"
+}

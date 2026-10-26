@@ -1,0 +1,7 @@
+{
+  "_source": "built from the argument list of docs.slack.dev/reference/methods/conversations.history (form-encoded, so every value is a string)",
+  "channel": "D024BE91L",
+  "latest": "1721232000.123456",
+  "inclusive": "true",
+  "limit": "1"
+}

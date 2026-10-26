@@ -1,0 +1,19 @@
+{
+  "_source": "docs.slack.dev/reference/events/message.im; user equals authorizations[0].user_id, the app's own bot user, without bot_id (the second of the two own-message checks)",
+  "token": "one-long-verification-token",
+  "team_id": "T123ABC456",
+  "api_app_id": "A123ABC456",
+  "event": {
+    "type": "message",
+    "channel": "D024BE91L",
+    "user": "U0LAN0Z89",
+    "text": "An answer of the app itself",
+    "ts": "1355517525.000007",
+    "event_ts": "1355517525.000007",
+    "channel_type": "im"
+  },
+  "type": "event_callback",
+  "event_id": "Ev0PV52K24",
+  "event_time": 1355517525,
+  "authorizations": [{"enterprise_id": null, "team_id": "T123ABC456", "user_id": "U0LAN0Z89", "is_bot": true, "is_enterprise_install": false}]
+}

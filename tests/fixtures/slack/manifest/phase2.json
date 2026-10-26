@@ -1,0 +1,16 @@
+{
+  "_source": "docs.slack.dev/reference/app-manifest: settings.event_subscriptions (request_url, bot_events) and settings.interactivity (is_enabled, request_url); phase 2 adds the channel's URL",
+  "display_information": {"name": "FaPost Assistant"},
+  "features": {
+    "app_home": {"home_tab_enabled": false, "messages_tab_enabled": true, "messages_tab_read_only_enabled": false},
+    "bot_user": {"display_name": "fapost-assistant", "always_online": true}
+  },
+  "oauth_config": {"scopes": {"bot": ["chat:write", "im:history", "users:read", "files:read"]}},
+  "settings": {
+    "event_subscriptions": {"request_url": "https://hooks.example.test/webhook/slack/abc123", "bot_events": ["message.im"]},
+    "interactivity": {"is_enabled": true, "request_url": "https://hooks.example.test/webhook/slack/abc123"},
+    "org_deploy_enabled": false,
+    "socket_mode_enabled": false,
+    "token_rotation_enabled": false
+  }
+}

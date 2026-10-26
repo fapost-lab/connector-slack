@@ -1,0 +1,187 @@
+# The checks a change has to pass before it reaches main.
+#
+# This package is not an application: it is loaded into FaPost Core. So its tests
+# run inside a checkout of Core, against the real application, and the last step
+# proves the other half of the contract: Core still boots once the package is gone.
+
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PHP_VERSION: "8.5"
+  # The same set Core's CI installs (see its .github/workflows/ci.yml).
+  PHP_EXTENSIONS: pdo_pgsql, pdo_sqlite, intl, bcmath, zip, gd, pcntl, sockets, redis
+  # The oldest Foundation this package works with (composer.json: fapost/foundation >=0.33).
+  MIN_FOUNDATION: "0.33.0"
+
+jobs:
+  # The Cores the package is checked against: the line that carries the connector contract,
+  # and the last release an operator can actually run.
+  core-release:
+    name: Core versions
+    runs-on: ubuntu-latest
+    outputs:
+      refs: ${{ steps.latest.outputs.refs }}
+
+    steps:
+      # Core is public, so the token every run gets is enough, in a fork's pull request too.
+      - id: latest
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tag="$(gh api repos/fapost-lab/core/releases/latest --jq .tag_name)"
+          test -n "$tag"
+          # TODO: switch `epic/channel-connectors` to `main` once the epic is merged into Core's main.
+          # The contract this package needs (Foundation 0.33) lives on the epic until then.
+          echo "refs=[\"epic/channel-connectors\",\"${tag}\"]" >> "$GITHUB_OUTPUT"
+
+  package:
+    name: Package (Core ${{ matrix.core_ref }})
+    needs: core-release
+    runs-on: ubuntu-latest
+
+    strategy:
+      # One Core failing must not hide the result against the other.
+      fail-fast: false
+      matrix:
+        core_ref: ${{ fromJSON(needs.core-release.outputs.refs) }}
+
+    steps:
+      # Core is the host application; the package has nothing to boot without it.
+      # Core is public, so no token of its own is needed.
+      - name: Check out Core
+        uses: actions/checkout@v7
+        with:
+          repository: fapost-lab/core
+          ref: ${{ matrix.core_ref }}
+          persist-credentials: false
+          path: core
+
+      # A Core that locks an older Foundation cannot run this package at all: the contract it
+      # needs (ingress spec version 2, ignored events, the setup guide) is not there. Such a Core
+      # is skipped, not failed: every step below waits for this answer.
+      - name: Check the Foundation of this Core
+        id: foundation
+        working-directory: core
+        run: |
+          version="$(jq -r '[.packages[] | select(.name == "fapost/foundation") | .version][0] // ""' composer.lock)"
+          version="${version#v}"
+          if [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+ ]] \
+            && [ "$(printf '%s\n%s\n' "$version" "$MIN_FOUNDATION" | sort -V | head -n1)" = "$MIN_FOUNDATION" ]; then
+            echo "supported=true" >> "$GITHUB_OUTPUT"
+            echo "Core ${{ matrix.core_ref }} locks fapost/foundation ${version}."
+          else
+            echo "supported=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Core ${{ matrix.core_ref }} locks fapost/foundation '${version}', below ${MIN_FOUNDATION}: skipped."
+          fi
+
+      # Under Core's packages/ directory, where the overlay and Core's tooling
+      # expect a package checkout to be.
+      - name: Check out the package
+        if: steps.foundation.outputs.supported == 'true'
+        uses: actions/checkout@v7
+        with:
+          path: core/packages/connector-slack
+
+      - uses: shivammathur/setup-php@v2
+        if: steps.foundation.outputs.supported == 'true'
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          extensions: ${{ env.PHP_EXTENSIONS }}
+          coverage: none
+
+      - name: Cache Composer packages
+        if: steps.foundation.outputs.supported == 'true'
+        uses: actions/cache@v6
+        with:
+          path: ~/.composer/cache
+          key: composer-${{ runner.os }}-${{ matrix.core_ref }}-${{ hashFiles('core/composer.lock') }}
+          restore-keys: composer-${{ runner.os }}-
+
+      # Core's composer.json cannot name this package, so it is added on top
+      # of Core's locked versions with the composer overlay: the same mechanism
+      # local development uses.
+      - name: Describe the overlay
+        if: steps.foundation.outputs.supported == 'true'
+        working-directory: core
+        run: |
+          cat > composer.overlay.json <<'JSON'
+          {
+            "repositories": [{ "type": "path", "url": "packages/connector-slack" }],
+            "require": { "fapost/connector-slack": "@dev" }
+          }
+          JSON
+
+      - name: Install Core with the package
+        if: steps.foundation.outputs.supported == 'true'
+        working-directory: core
+        # fapost/foundation and fapost/support are public, but they are `vcs`
+        # repositories: Composer reads them through the GitHub API and their
+        # zipballs come from api.github.com. Unauthenticated that is 60 calls
+        # an hour per IP, and past it Composer falls back to `git clone` over
+        # SSH and fails with a misleading "Permission denied (publickey)".
+        # The token every run gets automatically lifts the limit.
+        env:
+          COMPOSER_AUTH: '{"github-oauth":{"github.com":"${{ secrets.GITHUB_TOKEN }}"}}'
+        # The script is run directly: through `composer
+        # overlay`, --no-scripts would disable the overlay script itself. Core's
+        # post-update scripts are skipped because they run development tooling
+        # (boost:update, ide-helper) a CI checkout has no use for; package
+        # discovery runs below through post-autoload-dump.
+        # --require-overlay: a lost overlay file must fail the job, not pass as a
+        # Core-only install.
+        run: php tools/composer-overlay.php --require-overlay -- --no-scripts --no-interaction --no-progress --prefer-dist
+
+      - name: Prepare environment
+        if: steps.foundation.outputs.supported == 'true'
+        working-directory: core
+        # Composer commands after the overlay read the overlaid manifest.
+        env:
+          COMPOSER: composer.local.json
+        run: |
+          cp .env.example .env
+          php artisan key:generate --ansi
+          composer run-script post-autoload-dump --no-interaction
+
+      - name: Validate composer.json
+        if: steps.foundation.outputs.supported == 'true'
+        working-directory: core/packages/connector-slack
+        run: composer validate --strict
+
+      - name: Code style
+        if: steps.foundation.outputs.supported == 'true'
+        working-directory: core/packages/connector-slack
+        # Core's Pint, with the package's own pint.json. --test reports without
+        # changing anything.
+        run: ../../vendor/bin/pint --test --config pint.json src tests lang
+
+      - name: Tests
+        if: steps.foundation.outputs.supported == 'true'
+        working-directory: core/packages/connector-slack
+        # Inside Core's application: tests/bootstrap.php loads Core's autoloader.
+        run: php ../../vendor/bin/phpunit -c phpunit.xml
+
+      # Core works with and without this package and never checks whether it is
+      # installed. Dropping the overlay must leave a Core that still boots — the
+      # same move a developer makes with a plain `composer install`.
+      - name: Core without the package
+        if: steps.foundation.outputs.supported == 'true'
+        working-directory: core
+        env:
+          COMPOSER_AUTH: '{"github-oauth":{"github.com":"${{ secrets.GITHUB_TOKEN }}"}}'
+        run: |
+          composer install --no-interaction --no-progress --prefer-dist --no-scripts
+          composer run-script post-autoload-dump --no-interaction
+          php artisan about --only=environment
+          test ! -e vendor/composer/installed.json || ! grep -q '"name": "fapost/connector-slack"' vendor/composer/installed.json

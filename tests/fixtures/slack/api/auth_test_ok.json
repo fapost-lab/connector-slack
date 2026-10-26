@@ -1,0 +1,11 @@
+{
+  "_source": "docs.slack.dev/reference/methods/auth.test (example response, with bot_id as a bot token returns it)",
+  "ok": true,
+  "url": "https://acme.slack.com/",
+  "team": "Acme Workspace",
+  "user": "fapost_assistant",
+  "team_id": "T123ABC456",
+  "user_id": "U0LAN0Z89",
+  "bot_id": "B12345678",
+  "is_enterprise_install": false
+}
