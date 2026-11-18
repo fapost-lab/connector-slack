@@ -1,0 +1,131 @@
+{
+  "_source": "Recorded from a live Slack app in a direct message, the edit that removed buttons from the app's message (message_changed); ids replaced with placeholders",
+  "token": "one-long-verification-token",
+  "team_id": "T123ABC456",
+  "context_team_id": "T123ABC456",
+  "context_enterprise_id": null,
+  "api_app_id": "A123ABC456",
+  "event": {
+    "type": "message",
+    "subtype": "message_changed",
+    "message": {
+      "user": "U0LAN0Z89",
+      "type": "message",
+      "edited": {
+        "user": "U0LAN0Z89",
+        "ts": "1794996609.000000"
+      },
+      "bot_id": "B0LAN0Z89",
+      "app_id": "A123ABC456",
+      "text": "Выберите вариант:",
+      "team": "T123ABC456",
+      "bot_profile": {
+        "id": "B0LAN0Z89",
+        "deleted": false,
+        "name": "FaPost Assistant",
+        "updated": 1794954185,
+        "app_id": "A123ABC456",
+        "user_id": "U0LAN0Z89",
+        "icons": {
+          "image_36": "https://a.slack-edge.com/80588/img/plugins/app/bot_36.png",
+          "image_48": "https://a.slack-edge.com/80588/img/plugins/app/bot_48.png",
+          "image_72": "https://a.slack-edge.com/80588/img/plugins/app/service_72.png"
+        },
+        "team_id": "T123ABC456"
+      },
+      "blocks": [
+        {
+          "type": "section",
+          "block_id": "6Ka0k",
+          "text": {
+            "type": "mrkdwn",
+            "text": "Выберите вариант:",
+            "verbatim": false
+          }
+        }
+      ],
+      "ts": "1794996603.151119",
+      "source_team": "T123ABC456",
+      "user_team": "T123ABC456"
+    },
+    "previous_message": {
+      "user": "U0LAN0Z89",
+      "type": "message",
+      "ts": "1794996603.151119",
+      "bot_id": "B0LAN0Z89",
+      "app_id": "A123ABC456",
+      "text": "Выберите вариант:",
+      "team": "T123ABC456",
+      "bot_profile": {
+        "id": "B0LAN0Z89",
+        "deleted": false,
+        "name": "FaPost Assistant",
+        "updated": 1794954185,
+        "app_id": "A123ABC456",
+        "user_id": "U0LAN0Z89",
+        "icons": {
+          "image_36": "https://a.slack-edge.com/80588/img/plugins/app/bot_36.png",
+          "image_48": "https://a.slack-edge.com/80588/img/plugins/app/bot_48.png",
+          "image_72": "https://a.slack-edge.com/80588/img/plugins/app/service_72.png"
+        },
+        "team_id": "T123ABC456"
+      },
+      "blocks": [
+        {
+          "type": "section",
+          "block_id": "6Ka0k",
+          "text": {
+            "type": "mrkdwn",
+            "text": "Выберите вариант:",
+            "verbatim": false
+          }
+        },
+        {
+          "type": "actions",
+          "block_id": "sR761",
+          "elements": [
+            {
+              "type": "button",
+              "action_id": "fp:0:0",
+              "text": {
+                "type": "plain_text",
+                "text": "Вариант A",
+                "emoji": true
+              },
+              "value": "0000000000000000000000000000000000000000000000000000000000000a01"
+            },
+            {
+              "type": "button",
+              "action_id": "fp:0:1",
+              "text": {
+                "type": "plain_text",
+                "text": "Вариант B",
+                "emoji": true
+              },
+              "value": "0000000000000000000000000000000000000000000000000000000000000b02"
+            }
+          ]
+        }
+      ]
+    },
+    "channel": "D024BE91L",
+    "hidden": true,
+    "ts": "1794996609.000100",
+    "event_ts": "1794996609.000100",
+    "channel_type": "im"
+  },
+  "type": "event_callback",
+  "event_id": "Ev0LIVE0003",
+  "event_time": 1794996609,
+  "authorizations": [
+    {
+      "enterprise_id": null,
+      "team_id": "T123ABC456",
+      "user_id": "U0LAN0Z89",
+      "is_bot": true,
+      "is_enterprise_install": false
+    }
+  ],
+  "is_ext_shared_channel": false,
+  "event_context": "4-REDACTED"
+}

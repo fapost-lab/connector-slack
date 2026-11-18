@@ -133,6 +133,31 @@ final class SlackIngressSpecTest extends TestCase
         $this->assertSame($challenge['challenge'], $this->executor->handshakeResponse($this->spec, $request));
     }
 
+    public function test_the_live_url_verification_is_answered_with_its_challenge(): void
+    {
+        $challenge = Fixture::json('events/url_verification_live');
+        $request   = $this->signed((string) json_encode($challenge), 1700000000);
+
+        $this->assertTrue($this->executor->verify($this->spec, $request, self::SECRET, 1700000000));
+        $this->assertSame($challenge['challenge'], $this->executor->handshakeResponse($this->spec, $request));
+    }
+
+    public function test_a_live_event_and_a_live_button_press_are_keyed_by_their_ids(): void
+    {
+        $event = $this->signed((string) json_encode(Fixture::json('events/message_im_text_live')), 1700000000);
+        $press = $this->signed(
+            'payload=' . rawurlencode((string) json_encode(Fixture::json('interactivity/block_actions_fp_live'))),
+            1700000000,
+            ['Content-Type' => 'application/x-www-form-urlencoded'],
+        );
+
+        $this->assertSame('slack:chan-1:Ev0LIVE0001', $this->executor->idempotencyKey($this->spec, $event, 'chan-1'));
+        $this->assertSame(
+            'slack:chan-1:13345224609.738474920.8088930838d88f008e0',
+            $this->executor->idempotencyKey($this->spec, $press, 'chan-1'),
+        );
+    }
+
     public function test_a_button_press_is_a_form_whose_payload_field_is_the_document(): void
     {
         $press   = Fixture::json('interactivity/block_actions_fp');

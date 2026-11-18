@@ -1,0 +1,50 @@
+{
+  "_source": "Recorded from a live Slack app in a direct message, a person's text message; ids, names, tokens and links replaced with placeholders",
+  "token": "one-long-verification-token",
+  "team_id": "T123ABC456",
+  "context_team_id": "T123ABC456",
+  "context_enterprise_id": null,
+  "api_app_id": "A123ABC456",
+  "event": {
+    "type": "message",
+    "user": "U2147483697",
+    "ts": "1794996600.127129",
+    "client_msg_id": "00000000-0000-4000-8000-000000000001",
+    "text": "привет",
+    "team": "T123ABC456",
+    "blocks": [
+      {
+        "type": "rich_text",
+        "block_id": "GiGDx",
+        "elements": [
+          {
+            "type": "rich_text_section",
+            "elements": [
+              {
+                "type": "text",
+                "text": "привет"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "channel": "D024BE91L",
+    "event_ts": "1794996600.127129",
+    "channel_type": "im"
+  },
+  "type": "event_callback",
+  "event_id": "Ev0LIVE0001",
+  "event_time": 1794996600,
+  "authorizations": [
+    {
+      "enterprise_id": null,
+      "team_id": "T123ABC456",
+      "user_id": "U0LAN0Z89",
+      "is_bot": true,
+      "is_enterprise_install": false
+    }
+  ],
+  "is_ext_shared_channel": false,
+  "event_context": "4-REDACTED"
+}

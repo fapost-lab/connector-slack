@@ -85,6 +85,9 @@ Saving checks the token with Slack (`auth.test`, `bots.info`) and fills the work
    sets both, and confirm the URL when Slack asks.
 5. Open the app in Slack, go to its **Messages** tab and write to it.
 
+The bot shows Slack's default avatar until you give the app an icon. A manifest cannot set one, so upload it by hand
+in the app's settings: **Basic Information**, **Display Information**.
+
 If the channel's public hash is rotated, the URL changes: paste the new one into both places again.
 
 The bot scopes are `chat:write`, `im:history`, `users:read` and `files:read`, the same in both manifests, so the

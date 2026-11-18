@@ -1,0 +1,6 @@
+{
+  "_source": "Recorded from a live Slack app in a direct message, Slack's url_verification handshake; token and challenge replaced",
+  "token": "one-long-verification-token",
+  "challenge": "3eZbrw1aBm2rZgRNFdxV2595E9CY3gmdALWMmHkvFXO7tYXAYM8P",
+  "type": "url_verification"
+}

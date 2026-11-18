@@ -42,9 +42,7 @@ jobs:
         run: |
           tag="$(gh api repos/fapost-lab/core/releases/latest --jq .tag_name)"
           test -n "$tag"
-          # TODO: switch `epic/channel-connectors` to `main` once the epic is merged into Core's main.
-          # The contract this package needs (Foundation 0.33) lives on the epic until then.
-          echo "refs=[\"epic/channel-connectors\",\"${tag}\"]" >> "$GITHUB_OUTPUT"
+          echo "refs=[\"main\",\"${tag}\"]" >> "$GITHUB_OUTPUT"
 
   package:
     name: Package (Core ${{ matrix.core_ref }})
