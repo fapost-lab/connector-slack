@@ -2,7 +2,7 @@
   "name": "fapost/connector-slack",
   "description": "A FaPost channel connector for Slack: an assistant answers in a Slack workspace through a Slack app",
   "type": "fapost-connector",
-  "license": "Apache-2.0",
+  "license": "MIT",
   "homepage": "https://github.com/fapost-lab/connector-slack",
   "support": {
     "issues": "https://github.com/fapost-lab/connector-slack/issues",
