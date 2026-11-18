@@ -133,9 +133,9 @@ locks a Foundation older than 0.33), and proves that Core still boots without th
 
 ## Contributing
 
-Contributions are licensed under Apache-2.0 and need the Contributor Licence Agreement, which a bot asks you to
-sign on your first pull request.
+Contributions are licensed under MIT, the package's own licence.
 
 ## License
 
-Apache-2.0, see [LICENSE](LICENSE).
+MIT, see [LICENSE](LICENSE). Core is Apache-2.0; connectors are MIT so that a connector for another provider can be
+started from this one with nothing more than the copyright notice to keep.
