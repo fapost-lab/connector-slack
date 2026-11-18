@@ -60,6 +60,85 @@ final class SlackApiClientTest extends TestCase
         }
     }
 
+    public function test_the_reason_slack_gives_in_response_metadata_joins_the_message(): void
+    {
+        $http = $this->fakeHttp(['slack.com/api/*' => Factory::response([
+            'ok'                => false,
+            'error'             => 'invalid_blocks',
+            'response_metadata' => [
+                'messages' => ['[ERROR] downloading image failed [json-pointer:/blocks/0/image_url]', '[ERROR] another'],
+                'warnings' => ['missing_charset'],
+            ],
+        ])]);
+
+        try {
+            (new SlackApiClient($http))->postJson(StubChannel::TOKEN, 'chat.postMessage');
+            $this->fail('The call should have failed.');
+        } catch (SlackApiException $exception) {
+            $this->assertSame('invalid_blocks', $exception->errorCode);
+            $this->assertSame(
+                '[ERROR] downloading image failed [json-pointer:/blocks/0/image_url]; [ERROR] another; missing_charset',
+                $exception->reason,
+            );
+            $this->assertSame(
+                'Slack API chat.postMessage failed: invalid_blocks ([ERROR] downloading image failed [json-pointer:/blocks/0/image_url]; [ERROR] another; missing_charset)',
+                $exception->getMessage(),
+            );
+        }
+    }
+
+    public function test_the_reason_is_read_from_a_refused_http_status_too(): void
+    {
+        $http = $this->fakeHttp(['slack.com/api/*' => Factory::response(['ok' => false, 'error' => 'invalid_arguments', 'response_metadata' => ['messages' => ['bad']]], 400)]);
+
+        try {
+            (new SlackApiClient($http))->postJson(StubChannel::TOKEN, 'chat.postMessage');
+            $this->fail('The call should have failed.');
+        } catch (SlackApiException $exception) {
+            $this->assertSame('Slack API chat.postMessage failed: invalid_arguments (bad)', $exception->getMessage());
+        }
+    }
+
+    public function test_the_reason_never_holds_a_link_or_a_token_and_is_bounded(): void
+    {
+        $http = $this->fakeHttp(['slack.com/api/*' => Factory::response([
+            'ok'                => false,
+            'error'             => 'invalid_blocks',
+            'response_metadata' => ['messages' => [
+                'cannot download https://files.example.test/m/abc?signature=secret-signed&expires=1 now',
+                'token ' . StubChannel::TOKEN . ' leaked',
+                str_repeat('x', 900),
+            ]],
+        ])]);
+
+        try {
+            (new SlackApiClient($http))->postJson(StubChannel::TOKEN, 'chat.postMessage');
+            $this->fail('The call should have failed.');
+        } catch (SlackApiException $exception) {
+            $message = $exception->getMessage();
+
+            $this->assertStringContainsString('cannot download [link] now', $message);
+            $this->assertStringNotContainsString('secret-signed', $message);
+            $this->assertStringNotContainsString('files.example.test', $message);
+            $this->assertStringNotContainsString(StubChannel::TOKEN, $message);
+            $this->assertSame(SlackApiClient::REASON_MAX, mb_strlen((string) $exception->reason));
+            $this->assertStringEndsWith('…', (string) $exception->reason);
+        }
+    }
+
+    public function test_a_failure_without_metadata_keeps_the_plain_message(): void
+    {
+        $http = $this->fakeHttp(['slack.com/api/*' => Factory::response(['ok' => false, 'error' => 'invalid_auth', 'response_metadata' => ['messages' => []]])]);
+
+        try {
+            (new SlackApiClient($http))->postJson(StubChannel::TOKEN, 'chat.postMessage');
+            $this->fail('The call should have failed.');
+        } catch (SlackApiException $exception) {
+            $this->assertNull($exception->reason);
+            $this->assertSame('Slack API chat.postMessage failed: invalid_auth', $exception->getMessage());
+        }
+    }
+
     public function test_a_body_that_is_not_slacks_answer_is_an_invalid_response(): void
     {
         $http = $this->fakeHttp(['slack.com/api/*' => Factory::response('<html>proxy</html>', 200)]);

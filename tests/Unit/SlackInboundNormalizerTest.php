@@ -23,6 +23,9 @@ final class SlackInboundNormalizerTest extends TestCase
     {
         return [
             'a message of a bot'               => ['events/message_im_bot', 'message from a bot'],
+            'the echo of the app, live'        => ['events/message_im_bot_live', 'message from a bot'],
+            'the edit stripping buttons, live' => ['events/message_changed_live', 'message subtype message_changed'],
+            'a url verification, live'         => ['events/url_verification_live', 'request type url_verification'],
             'the app\'s own user'              => ['events/message_im_own_user', 'message from the app itself'],
             'an edited message'                => ['events/message_changed', 'message subtype message_changed'],
             'the app home being opened'        => ['events/app_home_opened', 'event app_home_opened is not a message'],
@@ -172,6 +175,43 @@ final class SlackInboundNormalizerTest extends TestCase
         $this->assertSame('slack', $message->platform);
         $this->assertSame(
             ['message_id' => 'D024BE91L:1721232000.123456', 'team_id' => 'T123ABC456'],
+            $message->payload,
+        );
+    }
+
+    public function test_a_live_text_message_is_a_text_message(): void
+    {
+        $message = $this->normalize(Fixture::json('events/message_im_text_live'));
+
+        $this->assertSame('Ev0LIVE0001', $message->updateId);
+        $this->assertSame('U2147483697', $message->externalUserId);
+        $this->assertSame('D024BE91L', $message->externalChatId);
+        $this->assertSame('привет', $message->text);
+        $this->assertSame(IncomingMessageType::Text, $message->type);
+    }
+
+    public function test_a_live_image_upload_carries_the_slack_file_id_and_no_text(): void
+    {
+        $message = $this->normalize(Fixture::json('events/message_im_file_share_live'));
+
+        $this->assertSame(IncomingMessageType::Photo, $message->type);
+        $this->assertNull($message->text);
+        $this->assertEquals(
+            [new IncomingMedia('F0LIVE0001', MediaKind::Image, 'image/png', 'certificate.png', 124686)],
+            $message->media,
+        );
+    }
+
+    public function test_a_live_button_press_is_a_callback_query_with_the_button_value(): void
+    {
+        $message = $this->normalize(Fixture::json('interactivity/block_actions_fp_live'));
+
+        $this->assertSame(IncomingMessageType::CallbackQuery, $message->type);
+        $this->assertSame('0000000000000000000000000000000000000000000000000000000000000a01', $message->text);
+        $this->assertSame('U2147483697', $message->externalUserId);
+        $this->assertSame('D024BE91L', $message->externalChatId);
+        $this->assertSame(
+            ['message_id' => 'D024BE91L:1794996603.151119', 'team_id' => 'T123ABC456'],
             $message->payload,
         );
     }

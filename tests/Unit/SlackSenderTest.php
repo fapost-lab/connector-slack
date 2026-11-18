@@ -232,6 +232,29 @@ final class SlackSenderTest extends TestCase
         $this->assertStringNotContainsString('secret-signed-link', (string) $result->error);
     }
 
+    public function test_a_failed_result_carries_slacks_reason_without_the_media_link(): void
+    {
+        $http = $this->fakeHttp([self::POST => Factory::response([
+            'ok'                => false,
+            'error'             => 'invalid_blocks',
+            'response_metadata' => ['messages' => ['[ERROR] downloading image failed [json-pointer:/blocks/0/image_url] https://example.test/m/secret-signed-link']],
+        ])]);
+
+        $result = $this->sender($http)->deliver($this->message(new MessagePayload(
+            type: 'photo',
+            text: '',
+            media: ['url' => 'https://example.test/m/secret-signed-link', 'mime_type' => 'image/png', 'file_name' => 'a.png'],
+        )), new StubChannel());
+
+        $this->assertFalse($result->sent);
+        $this->assertSame(
+            'Slack API chat.postMessage failed: invalid_blocks ([ERROR] downloading image failed [json-pointer:/blocks/0/image_url] [link])',
+            $result->error,
+        );
+        $this->assertStringNotContainsString('secret-signed-link', (string) $result->error);
+        $this->assertStringNotContainsString(StubChannel::TOKEN, (string) $result->error);
+    }
+
     public function test_the_result_is_a_delivery_result_even_when_slack_answers_without_a_ts(): void
     {
         $http = $this->fakeHttp([self::POST => Factory::response(['ok' => true])]);
